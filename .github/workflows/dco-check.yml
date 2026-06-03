@@ -14,6 +14,8 @@ jobs:
 
       - name: Check signoff
         run: |
-          git log origin/${{ github.base_ref }}..HEAD \
-            --format='%B' | grep -q "Signed-off-by:" \
-          || (echo "Missing DCO Signoff" && exit 1)
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            git log origin/${{ github.base_ref }}..HEAD \
+              --format='%B' | grep -q "Signed-off-by:" \
+            || (echo "Missing DCO Signoff" && exit 1)
+          fi
